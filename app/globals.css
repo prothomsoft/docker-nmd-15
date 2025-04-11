@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Oswald Font */
+@font-face {
+  font-family: "Oswald";
+  src: url("/fonts/Oswald-Regular.ttf");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -17,9 +26,58 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
-}
+  font-family: "Oswald", Arial, Helvetica, sans-serif;
+ }
 
 .invert-colors {
   filter: invert(1);
+}
+
+/* Tailwind Customizations */
+
+
+
+@layer base {
+  /* Apply Oswald font globally */
+  body {
+    @apply font-oswald;
+  }
+
+  /* Quote Title Styles */
+  .quote-title {
+    @apply flex items-center text-white py-2;
+  }
+
+  /* Generic Button Link Style */
+  .btn-link {
+    @apply inline-flex items-center px-0 py-0 bg-transparent text-white font-medium text-sm rounded-md focus:outline-none focus:ring-0 no-underline;
+    font-size: 1.2rem;
+    text-decoration: none; /* Ensure no underline */
+  }
+
+  .btn-link-portfolio {
+    @apply block w-full text-left px-3 py-3 bg-transparent text-white font-medium text-sm rounded-md hover:bg-gray-800 focus:outline-none focus:ring-0 no-underline;
+    font-size: 1.2rem;
+    
+    text-decoration: none; /* Ensure no underline */
+  }
+
+  .quote-title::before,
+  .quote-title::after {
+    content: "";
+    @apply block border border-[#33b59a] flex-grow mx-2;
+  }
+
+  /* Link Styles */
+  a {
+    @apply text-white no-underline;
+  }
+
+  a:hover {
+    @apply underline;
+  }
+
+  a:active {
+    @apply no-underline;
+  }
 }

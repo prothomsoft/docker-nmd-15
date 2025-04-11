@@ -46,38 +46,35 @@ const images = [
 ];
 
 export default function ImageCarousel() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  
   const sliderRef = useRef<Slider | null>(null); // Reference to the Slider instance
 
   const settings = {
     dots: false, // Disable dots
     infinite: true,
-    speed: 500,
+    speed: 800,
     slidesToShow: 3, // Default number of slides to show
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 5000,
+    autoplaySpeed: 2000,
     centerMode: true,
-    centerPadding: "0px", // Prevent overflow
+    centerPadding: "60px", // Prevent overflow
     arrows: false, // Disable default arrows
-    beforeChange: (oldIndex: number, newIndex: number) => {
-      setCurrentSlide(newIndex);
-    },
     responsive: [
       {
-        breakpoint: 767, // Mobile (Portrait)
+        breakpoint: 640, // Mobile (Portrait)
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          centerMode: false, // Disable center mode for mobile
+          centerMode: true, // Disable center mode for mobile
         },
       },
       {
-        breakpoint: 880, // Mobile (Landscape)
+        breakpoint: 768, // Mobile (Landscape)
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
-          centerMode: false,
+          centerMode: true,
         },
       },
       {
@@ -85,19 +82,19 @@ export default function ImageCarousel() {
         settings: {
           slidesToShow: 2,
           slidesToScroll: 1,
-          centerMode: false,
+          centerMode: true,
         },
       },
       {
-        breakpoint: 1200, // Tablet (Landscape)
+        breakpoint: 1280, // Tablet (Landscape)
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
-          centerMode: false,
+          centerMode: true,
         },
       },
       {
-        breakpoint: 1366, // Laptop
+        breakpoint: 1536, // Laptop
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
@@ -116,7 +113,7 @@ export default function ImageCarousel() {
   };
 
   return (
-    <div className="w-full py-12 overflow-hidden">
+    <div className="w-full py-4 overflow-hidden relative">
       <Slider ref={sliderRef} {...settings}>
         {images.map((image, index) => (
           <div key={index} className="px-2">
@@ -131,28 +128,7 @@ export default function ImageCarousel() {
           </div>
         ))}
       </Slider>
-      {/* Navigation Indicator with Arrows */}
-      <div className="flex items-center justify-center mt-4 text-lg font-semibold text-black">
-        <button
-          onClick={() => sliderRef.current?.slickPrev()} // Navigate to the previous slide
-          className="text-gray-600 hover:text-gray-900 mr-4"
-          aria-label="Previous Slide"
-        >
-          &#8592;
-        </button>
-        <span>
-          {currentSlide + 1}/{images.length}
-        </span>
-        <button
-          onClick={() => sliderRef.current?.slickNext()} // Navigate to the next slide
-          className="text-gray-600 hover:text-gray-900 ml-4"
-          aria-label="Next Slide"
-        >
-          &#8594;
-        </button>
-      </div>
-      {/* Add Responsive Info */}
-      <ResponsiveInfo />
+      
     </div>
   );
 }
