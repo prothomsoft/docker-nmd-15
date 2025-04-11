@@ -37,3 +37,6 @@ next-env.d.ts
 
 /application-log
 .idea
+
+# lock files
+package-lock.json
