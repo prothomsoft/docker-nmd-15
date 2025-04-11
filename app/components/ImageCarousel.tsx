@@ -1,63 +1,158 @@
 "use client";
 
-import { useState } from "react";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import Slider from "react-slick";
 import Image from "next/image";
+import { useState, useRef } from "react";
+import dynamic from "next/dynamic";
+
+// Dynamically import ResponsiveInfo with SSR disabled
+const ResponsiveInfo = dynamic(() => import("./ResponsiveInfo"), { ssr: false });
 
 const images = [
-  { src: "/image1.jpg", alt: "Image 1" },
-  { src: "/image2.jpg", alt: "Image 2" },
-  { src: "/image3.jpg", alt: "Image 3" },
+  {
+    src: "/slick1.jpg", // Path to image in the public directory
+    alt: "Slick Image 1",
+  },
+  {
+    src: "/slick2.webp", // Path to image in the public directory
+    alt: "Slick Image 2",
+  },
+  {
+    src: "/slick3.jpg", // Path to image in the public directory
+    alt: "Slick Image 3",
+  },
+  {
+    src: "/slick4.webp", // Path to image in the public directory
+    alt: "Slick Image 4",
+  },
+  {
+    src: "/slick5.webp", // Path to image in the public directory
+    alt: "Slick Image 5",
+  },
+  {
+    src: "/slick6.webp", // Path to image in the public directory
+    alt: "Slick Image 6",
+  },
+  {
+    src: "/slick7.webp", // Path to image in the public directory
+    alt: "Slick Image 7",
+  },
+  {
+    src: "/slick8.jpg", // Path to image in the public directory
+    alt: "Slick Image 8",
+  },
 ];
 
 export default function ImageCarousel() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const sliderRef = useRef<Slider | null>(null); // Reference to the Slider instance
 
-  const handlePrev = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? images.length - 1 : prevIndex - 1
-    );
-  };
-
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === images.length - 1 ? 0 : prevIndex + 1
-    );
+  const settings = {
+    dots: false, // Disable dots
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3, // Default number of slides to show
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 5000,
+    centerMode: true,
+    centerPadding: "0px", // Prevent overflow
+    arrows: false, // Disable default arrows
+    beforeChange: (oldIndex: number, newIndex: number) => {
+      setCurrentSlide(newIndex);
+    },
+    responsive: [
+      {
+        breakpoint: 767, // Mobile (Portrait)
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          centerMode: false, // Disable center mode for mobile
+        },
+      },
+      {
+        breakpoint: 880, // Mobile (Landscape)
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          centerMode: false,
+        },
+      },
+      {
+        breakpoint: 1024, // Tablet (Portrait)
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          centerMode: false,
+        },
+      },
+      {
+        breakpoint: 1200, // Tablet (Landscape)
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          centerMode: false,
+        },
+      },
+      {
+        breakpoint: 1366, // Laptop
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          centerMode: true,
+        },
+      },
+      {
+        breakpoint: 2400, // Widescreen
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 1,
+          centerMode: true,
+        },
+      },
+    ],
   };
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto">
-      <div className="overflow-hidden rounded-lg">
-        <Image
-          src={images[currentIndex].src}
-          alt={images[currentIndex].alt}
-          width={800}
-          height={400}
-          className="w-full h-auto object-cover"
-        />
-      </div>
-      <button
-        onClick={handlePrev}
-        className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700"
-      >
-        &#8592;
-      </button>
-      <button
-        onClick={handleNext}
-        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700"
-      >
-        &#8594;
-      </button>
-      <div className="flex justify-center mt-4 space-x-2">
-        {images.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`w-3 h-3 rounded-full ${
-              index === currentIndex ? "bg-blue-600" : "bg-gray-400"
-            }`}
-          ></button>
+    <div className="w-full py-12 overflow-hidden">
+      <Slider ref={sliderRef} {...settings}>
+        {images.map((image, index) => (
+          <div key={index} className="px-2">
+            <Image
+              src={image.src}
+              alt={image.alt}
+              width={600} // Original width
+              height={750} // Original height
+              className="object-cover"
+              loading="lazy" // Lazy loading for better performance
+            />
+          </div>
         ))}
+      </Slider>
+      {/* Navigation Indicator with Arrows */}
+      <div className="flex items-center justify-center mt-4 text-lg font-semibold text-black">
+        <button
+          onClick={() => sliderRef.current?.slickPrev()} // Navigate to the previous slide
+          className="text-gray-600 hover:text-gray-900 mr-4"
+          aria-label="Previous Slide"
+        >
+          &#8592;
+        </button>
+        <span>
+          {currentSlide + 1}/{images.length}
+        </span>
+        <button
+          onClick={() => sliderRef.current?.slickNext()} // Navigate to the next slide
+          className="text-gray-600 hover:text-gray-900 ml-4"
+          aria-label="Next Slide"
+        >
+          &#8594;
+        </button>
       </div>
+      {/* Add Responsive Info */}
+      <ResponsiveInfo />
     </div>
   );
 }
